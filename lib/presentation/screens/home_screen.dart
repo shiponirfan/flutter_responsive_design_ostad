@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_responsive_design_ostad/utils/app_colors.dart';
+import 'package:flutter_responsive_design_ostad/utils/screen_utils.dart';
+import 'package:flutter_responsive_design_ostad/widgets/app_logo_text.dart';
+import 'package:flutter_responsive_design_ostad/widgets/app_text_button.dart';
+import 'package:flutter_responsive_design_ostad/widgets/mobile_drawer_menu.dart';
 import 'package:flutter_responsive_design_ostad/widgets/responsive_builder.dart';
+import '../../widgets/tablet_desktop_appbar.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -13,140 +17,109 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return ResponsiveBuilder(
-        mobile: Scaffold(
-          appBar: AppBar(actions: [
-            Padding(
-              padding: const EdgeInsets.only(right: 28),
-              child: Text(
-                'Humming\nBird .'.toUpperCase(),
-                style: const TextStyle(fontSize: 18, height: 1),
-              ),
-            )
-          ]),
-          drawer: Drawer(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  color: AppColors.primaryColor,
-                  height: 200,
-                  width: double.infinity,
-                  child: SafeArea(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Skill Up Now'.toUpperCase(),
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 24,
-                          ),
-                        ),
-                        Text(
-                          'Tap Here'.toUpperCase(),
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w400,
-                            fontSize: 18,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                const Padding(
-                  padding: EdgeInsets.all(32),
-                  child: Column(
-                    children: [
-                      ListTile(
-                        title: Text(
-                          'Episodes',
-                          style: TextStyle(fontSize: 22, color: Colors.black),
-                        ),
-                        leading: Icon(
-                          Icons.movie_filter_outlined,
-                          size: 28,
-                          color: Colors.black,
-                        ),
-                        minLeadingWidth: 40,
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      ListTile(
-                        title: Text(
-                          'About',
-                          style: TextStyle(fontSize: 22, color: Colors.black),
-                        ),
-                        leading: Icon(
-                          Icons.question_answer_outlined,
-                          size: 28,
-                          color: Colors.black,
-                        ),
-                        minLeadingWidth: 40,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+        mobile: _mobileAppContent(),
+        tablet: _tabletAppContent(),
+        desktop: _desktopAppContent());
+  }
+
+  Widget _mobileAppContent() {
+    return Scaffold(
+      appBar: AppBar(toolbarHeight: 120, actions: const [
+        Padding(
+          padding: EdgeInsets.only(right: 20),
+          child: AppLogoText(),
+        )
+      ]),
+      drawer: const MobileDrawerMenu(),
+      body: _mobileTabletContentDesign(),
+    );
+  }
+
+  Widget _tabletAppContent() {
+    return Scaffold(
+      appBar: const TabletDesktopAppBar(),
+      body: _mobileTabletContentDesign(),
+    );
+  }
+
+  Widget _desktopAppContent() {
+    return Scaffold(
+      appBar: const TabletDesktopAppBar(),
+      body: Padding(
+        padding: const EdgeInsets.all(100),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            _bodyContentText(
+              textCenter: TextAlign.left,
+              alignment: CrossAxisAlignment.start,
+              headingSize: 64,
+              bodySize: 20,
             ),
-          ),
-          body: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    'Flutter Web.\nThe Basics'.toUpperCase(),
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 50,
-                      fontWeight: FontWeight.w900,
-                      height: 1,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  const Text(
-                    'In this course we will go over the basics of using Flutter Web for development. Topics will include Responsive Layout, Deploying, Font Changes, Hover functionality, Modals and more.',
-                    style: TextStyle(
-                      color: Colors.black,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(
-                    height: 50,
-                  ),
-                  TextButton(
-                    style: ButtonStyle(
-                      backgroundColor:
-                          WidgetStateProperty.all(AppColors.primaryColor),
-                      shape: WidgetStatePropertyAll(RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(6))),
-                      padding: const WidgetStatePropertyAll(
-                          EdgeInsets.symmetric(horizontal: 50, vertical: 10)),
-                    ),
-                    onPressed: () {},
-                    child: const Text(
-                      'Join course',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 20,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
+            const AppTextButton(),
+          ],
         ),
-        desktop: Scaffold());
+      ),
+    );
+  }
+
+  Widget _mobileTabletContentDesign() {
+    final size = MediaQuery.of(context).size;
+    final DeviceType deviceType = ScreenUtils.getDeviceType(size.width);
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            _bodyContentText(
+                textCenter: TextAlign.center,
+                alignment: CrossAxisAlignment.center,
+                headingSize: deviceType == DeviceType.tablet ? 60 : 44,
+                bodySize: deviceType == DeviceType.tablet ? 18 : 14),
+            const SizedBox(
+              height: 50,
+            ),
+            const AppTextButton(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _bodyContentText(
+      {required TextAlign textCenter,
+      required CrossAxisAlignment alignment,
+      required double headingSize,
+      required double bodySize}) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: alignment,
+      children: [
+        Text(
+          'Flutter Web.\nThe Basics'.toUpperCase(),
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: headingSize,
+            fontWeight: FontWeight.w900,
+            height: 1,
+          ),
+          textAlign: textCenter,
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        Text(
+          'In this course we will go over the basics of using\nFlutter Web for development. Topics will include\nResponsive Layout, Deploying, Font Changes, Hover\nfunctionality, Modals and more.',
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: bodySize,
+          ),
+          textAlign: textCenter,
+        ),
+      ],
+    );
   }
 }
