@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_responsive_design_ostad/utils/app_colors.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -25,7 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-              color: const Color(0xFF20E492),
+              color: AppColors.primaryColor,
               height: 200,
               width: double.infinity,
               child: SafeArea(
@@ -85,6 +86,57 @@ class _HomeScreenState extends State<HomeScreen> {
                     minLeadingWidth: 40,
                   ),
                 ],
+              ),
+            ),
+          ],
+        ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              'Flutter Web.\nThe Basics'.toUpperCase(),
+              style: const TextStyle(
+                color: Colors.black,
+                fontSize: 50,
+                fontWeight: FontWeight.w900,
+                height: 1,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            const Text(
+              'In this course we will go over the basics of using Flutter Web for development. Topics will include Responsive Layout, Deploying, Font Changes, Hover functionality, Modals and more.',
+              style: TextStyle(
+                color: Colors.black,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(
+              height: 50,
+            ),
+            TextButton(
+              style: ButtonStyle(
+                backgroundColor:
+                    WidgetStateProperty.all(AppColors.primaryColor),
+                shape: WidgetStatePropertyAll(RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(6))),
+                padding: const WidgetStatePropertyAll(
+                    EdgeInsets.symmetric(horizontal: 50, vertical: 10)),
+              ),
+              onPressed: () {},
+              child: const Text(
+                'Join course',
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 20,
+                  color: Colors.white,
+                ),
               ),
             ),
           ],
